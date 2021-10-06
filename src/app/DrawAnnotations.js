@@ -1,12 +1,12 @@
 import React, {useRef, useState} from "react";
 import {Arrow, Group, Layer, Rect, Stage, Text} from "react-konva";
+import {StickyNote} from "./StickyNote";
+import Edge from "./Edge";
 
 const DrawAnnotations = () => {
-        const [annotations, setAnnotations] = useState([]);
+        const [annotations, setAnnotations] = useState([]); // marker, label
         const [newRect, setNewRect] = useState([]);
         const [isDrawing, setIsDrawing] = useState(true)
-
-        const textRefs = useRef([])
 
         const handleMouseDown = event => {
             if (isDrawing && newRect.length === 0) {
@@ -27,15 +27,24 @@ const DrawAnnotations = () => {
                     height: y - sy,
                     key: annotations.length + 1
                 };
-                annotations.push({rect: rectToAdd});
+                annotations.push({marker: rectToAdd});
                 setNewRect([]);
                 setAnnotations(annotations);
 
                 if (isDrawing) {
                     setAnnotations(annotations.map((item) => {
-                        if (!item.text) {
-                            return {...item, text: {x: x + (x - sx) / 2, y:y - (y - sy) / 4, width: 250}}
-                        }
+                        if (!item.text)
+                            return {
+                                ...item,
+                                label: {
+                                    x: x + (x - sx) / 2,
+                                    y: y - (y - sy) / 4,
+                                    width: 250,
+                                    height: 20,
+                                    text: 'Write comments',
+                                    selected: false
+                                }
+                            }
                         return item
                     }))
                 }
@@ -60,60 +69,6 @@ const DrawAnnotations = () => {
             }
         };
 
-        const degrees_to_radians = degrees => degrees * (Math.PI / 180);
-
-        const Edge = ({node1, node2}) => {
-            const dx = node1.x - node2.x;
-            const dy = node1.y - node2.y;
-            let angle = Math.atan2(-dy, dx);
-
-            const radius = annotations[0].width / 2;
-
-            const arrowStart = {
-                x: node2.x,
-                y: node2.y + (node1.height / 2)
-            };
-
-            const arrowEnd = {
-                x: node1.x + node1.width + 4,
-                y: node1.y + (node1.height / 2)
-            };
-            // const arrowStart = {
-            //     x: radius + node2.x + -radius * Math.cos(angle + Math.PI),
-            //     y: radius + node2.y + radius * Math.sin(angle + Math.PI)
-            // };
-            //
-            // const arrowEnd = {
-            //     x: radius + node1.x + -radius * Math.cos(angle),
-            //     y: radius + node1.y + radius * Math.sin(angle)
-            // };
-
-            const arrowMiddle = {
-                x: (arrowStart.x + arrowEnd.x) / 2,
-                y: (arrowStart.y + arrowEnd.y) / 2
-            };
-
-            // const text = "Some text";
-
-            return (
-                <Arrow
-                    points={[
-                        arrowStart.x,
-                        arrowStart.y,
-                        arrowMiddle.x,
-                        arrowMiddle.y,
-                        arrowEnd.x,
-                        arrowEnd.y
-                    ]}
-                    draggable
-                    stroke="#07c"
-                    fill="#07c"
-                    strokeWidth={2}
-                    pointerWidth={6}
-                />
-            );
-        };
-
         return (
             <Stage
                 onMouseDown={handleMouseDown}
@@ -123,94 +78,74 @@ const DrawAnnotations = () => {
                 height={700}
             >
                 <Layer>
-
-
                     {annotations.map((annotation, index) => {
-                        // if(!annotation.rect) {
-                        //     return
-                        // }
                         return (
                             <>
-                                {annotation.rect && annotation.text && <Edge node1={annotation.rect} node2={annotation.text}/>}
+                                {annotation.marker && annotation.label &&
+                                <Edge node1={annotation.marker} node2={annotation.label}/>}
 
-                                {annotation.text && (
-                                    <Group>
-                                        <Text
-                                            text='B'
-                                            fontStyle='bold'
-                                            fontSize={20}
-                                            x={annotation.text.x-10}
-                                            y={textRefs.current[index]?.attrs.y - 36}
-                                            height={20}
-                                            width={20}
-                                        />
-                                        <Text
-                                            text='I'
-                                            fontStyle='italic'
-                                            fontSize={20}
-                                            x={annotation.text.x+20}
-                                            y={textRefs.current[index]?.attrs.y - 36}
-                                            height={20}
-                                            width={20}
-                                        />
-                                        <Text
-                                            text='U'
-                                            textDecoration='underline'
-                                            fontSize={20}
-                                            x={annotation.text.x+50}
-                                            y={textRefs.current[index]?.attrs.y - 36}
-                                            height={20}
-                                            width={20}
-                                        />
-                                        <Rect
-                                            x={annotation.text.x-10}
-                                            y={textRefs.current[index]?.attrs.y-10}
-                                            height={textRefs.current[index]?.textHeight*textRefs.current[index]?.textArr.length + 20}
-                                            width={annotation.text.width +20}
-                                            fill="yellow"
-                                            stroke="black"
-                                        />
-                                        <Text
-                                            ref={el => textRefs.current[index] = el}
-                                            text="Hello there!"
-                                            fontSize={16}
-                                            x={annotation.text.x}
-                                            y={annotation.text.y}
-                                            width={annotation.text.width}
-                                            fill="red"
+                                {annotation.label && (
+                                    <StickyNote
+                                        x={annotation.label.x}
+                                        y={annotation.label.y}
+                                        height={annotation.label.height}
+                                        width={annotation.label.width}
+                                        text={annotation.label.text}
+                                        colour="#FFDAE1"
+                                        onTextChange={(text) => {
+                                            setAnnotations(annotations.map((item) => {
+                                                if (!item.text)
+                                                    return {...item, label: {...item.label, text}}
+                                                return item
+                                            }))
+                                        }}
+                                        selected={annotation.label.selected}
+                                        onTextResize={(newWidth, newHeight) => {
+                                            setAnnotations(annotations.map((item) => {
+                                                if (!item.text)
+                                                    return {
+                                                        ...item,
+                                                        label: {
+                                                            ...item.label,
+                                                            width: newWidth,
+                                                            height: newHeight,
+                                                        }
+                                                    }
+                                                return item
+                                            }))
+                                        }}
+                                        onClick={() => {
+                                            setAnnotations(annotations.map((item) => {
+                                                if (!item.text)
+                                                    return {
+                                                        ...item,
+                                                        label: {...item.label, selected: !annotation.label.selected,}
+                                                    }
+                                                return item
+                                            }))
+                                        }}
+                                        onTextClick={(newSelected) => {
+                                            setAnnotations(annotations.map((item) => {
+                                                if (!item.text)
+                                                    return {
+                                                        ...item,
+                                                        label: {...item.label, selected: newSelected,}
+                                                    }
+                                                return item
+                                            }))
+                                        }}
+                                        setIsDrawing={setIsDrawing}
 
-                                            textDecoration={'underline'}
-                                            fontStyle='italic'
+                                    />
 
-                                            onMouseEnter={(e) => {
-                                                const container = e.target.getStage().container();
-                                                container.style.cursor = "pointer";
-                                                setIsDrawing(false)
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                const container = e.target.getStage().container();
-                                                container.style.cursor = "crosshair";
-                                                setIsDrawing(true)
-                                            }}
-                                            draggable
-                                            onDragMove={e => {
-                                                const ants = annotations.map((item, i) => {
-                                                    if (i === index) return {...item, text: {...item.text, ...e.target.position()}};
-                                                    return item
-                                                })
-                                                setAnnotations(ants)
-                                            }}
-
-                                        />
-
-                                    </Group>
                                 )}
 
+
                                 <Rect
-                                    x={annotation.rect.x}
-                                    y={annotation.rect.y}
-                                    width={annotation.rect.width}
-                                    height={annotation.rect.height}
+                                    x={annotation.marker.x}
+                                    y={annotation.marker.y}
+                                    width={annotation.marker.width}
+                                    height={annotation.marker.height}
                                     fill="transparent"
                                     stroke="red"
                                     draggable
@@ -227,7 +162,10 @@ const DrawAnnotations = () => {
                                     }}
                                     onDragMove={e => {
                                         const ants = annotations.map((item, i) => {
-                                            if (i === index) return {...item, rect: {...item.rect, ...e.target.position()}};
+                                            if (i === index) return {
+                                                ...item,
+                                                marker: {...item.marker, ...e.target.position()}
+                                            };
                                             return item
                                         })
                                         setAnnotations(ants)
