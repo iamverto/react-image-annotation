@@ -3,8 +3,9 @@ import {Arrow, Group, Image, Layer, Rect, Stage} from "react-konva";
 import {StickyNote} from "./StickyNote";
 import Edge from "./Edge";
 import Marker from "./Marker";
+import {Button} from "@mui/material";
 
-const DrawAnnotations = ({image}) => {
+const DrawAnnotations = ({image, clear}) => {
         const [annotations, setAnnotations] = useState([]); // marker, label
         const [newRect, setNewRect] = useState([]);
         const [isDrawing, setIsDrawing] = useState(true)
@@ -92,7 +93,7 @@ const DrawAnnotations = ({image}) => {
         let max = 800;
         let ratio = (image.width > image.height ? (image.width / max) : (image.height / max));
         return (
-            <div style={{width: image.width / ratio, margin: "auto"}}>
+            <div style={{width: image.width / ratio, margin: "auto"}} className='self-center flex flex-col space-y-12'>
                 <Stage
                     onMouseDown={handleMouseDown}
                     onMouseUp={handleMouseUp}
@@ -218,7 +219,10 @@ const DrawAnnotations = ({image}) => {
                     </Layer>
                 </Stage>
 
-                <button onClick={handleExport}>Export</button>
+                <div className='p-4'>
+                    <Button variant='contained' onClick={clear}>Clear All</Button>
+                    <Button onClick={handleExport}>Export</Button>
+                </div>
 
             </div>
         );
