@@ -1,10 +1,12 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {Arrow, Group, Layer, Rect, Stage, Text} from "react-konva";
 
 const DrawAnnotations = () => {
         const [annotations, setAnnotations] = useState([]);
         const [newRect, setNewRect] = useState([]);
         const [isDrawing, setIsDrawing] = useState(true)
+
+        const textRefs = useRef([])
 
         const handleMouseDown = event => {
             if (isDrawing && newRect.length === 0) {
@@ -132,33 +134,76 @@ const DrawAnnotations = () => {
                                 {annotation.rect && annotation.text && <Edge node1={annotation.rect} node2={annotation.text}/>}
 
                                 {annotation.text && (
-                                    <Text
-                                        text="Hello there! I am priyanshu... Hello there! I am priyanshu... Hello there! I am priyanshu... Hello there! I am priyanshu... Hello there! I am priyanshu... "
-                                        fontSize={16}
-                                        x={annotation.text.x}
-                                        y={annotation.text.y}
-                                        width={annotation.text.width}
-                                        fill="red"
-                                        onMouseEnter={(e) => {
-                                            const container = e.target.getStage().container();
-                                            container.style.cursor = "pointer";
-                                            setIsDrawing(false)
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            const container = e.target.getStage().container();
-                                            container.style.cursor = "crosshair";
-                                            setIsDrawing(true)
-                                        }}
-                                        draggable
-                                        onDragMove={e => {
-                                            const ants = annotations.map((item, i) => {
-                                                if (i === index) return {...item, text: {...item.text, ...e.target.position()}};
-                                                return item
-                                            })
-                                            setAnnotations(ants)
-                                        }}
+                                    <Group>
+                                        <Text
+                                            text='B'
+                                            fontStyle='bold'
+                                            fontSize={20}
+                                            x={annotation.text.x-10}
+                                            y={textRefs.current[index]?.attrs.y - 36}
+                                            height={20}
+                                            width={20}
+                                        />
+                                        <Text
+                                            text='I'
+                                            fontStyle='italic'
+                                            fontSize={20}
+                                            x={annotation.text.x+20}
+                                            y={textRefs.current[index]?.attrs.y - 36}
+                                            height={20}
+                                            width={20}
+                                        />
+                                        <Text
+                                            text='U'
+                                            textDecoration='underline'
+                                            fontSize={20}
+                                            x={annotation.text.x+50}
+                                            y={textRefs.current[index]?.attrs.y - 36}
+                                            height={20}
+                                            width={20}
+                                        />
+                                        <Rect
+                                            x={annotation.text.x-10}
+                                            y={textRefs.current[index]?.attrs.y-10}
+                                            height={textRefs.current[index]?.textHeight*textRefs.current[index]?.textArr.length + 20}
+                                            width={annotation.text.width +20}
+                                            fill="yellow"
+                                            stroke="black"
+                                        />
+                                        <Text
+                                            ref={el => textRefs.current[index] = el}
+                                            text="Hello there!"
+                                            fontSize={16}
+                                            x={annotation.text.x}
+                                            y={annotation.text.y}
+                                            width={annotation.text.width}
+                                            fill="red"
 
-                                    />
+                                            textDecoration={'underline'}
+                                            fontStyle='italic'
+
+                                            onMouseEnter={(e) => {
+                                                const container = e.target.getStage().container();
+                                                container.style.cursor = "pointer";
+                                                setIsDrawing(false)
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                const container = e.target.getStage().container();
+                                                container.style.cursor = "crosshair";
+                                                setIsDrawing(true)
+                                            }}
+                                            draggable
+                                            onDragMove={e => {
+                                                const ants = annotations.map((item, i) => {
+                                                    if (i === index) return {...item, text: {...item.text, ...e.target.position()}};
+                                                    return item
+                                                })
+                                                setAnnotations(ants)
+                                            }}
+
+                                        />
+
+                                    </Group>
                                 )}
 
                                 <Rect
