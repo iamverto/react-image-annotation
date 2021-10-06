@@ -1,6 +1,6 @@
-import React from "react";
-import { ResizableText } from "./ResizableText";
-import { EditableTextInput } from "./EditableTextInput";
+import React, {useEffect, useRef} from "react";
+import {ResizableText} from "./ResizableText";
+import {EditableTextInput} from "./EditableTextInput";
 
 const RETURN_KEY = 13;
 const ESCAPE_KEY = 27;

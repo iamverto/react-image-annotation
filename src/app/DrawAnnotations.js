@@ -31,23 +31,21 @@ const DrawAnnotations = () => {
                 setNewRect([]);
                 setAnnotations(annotations);
 
-                if (isDrawing) {
-                    setAnnotations(annotations.map((item) => {
-                        if (!item.text)
-                            return {
-                                ...item,
-                                label: {
-                                    x: x + (x - sx) / 2,
-                                    y: y - (y - sy) / 4,
-                                    width: 250,
-                                    height: 20,
-                                    text: 'Write comments',
-                                    selected: false
-                                }
+                setAnnotations(annotations.map((item) => {
+                    if (!item.label)
+                        return {
+                            ...item,
+                            label: {
+                                x: x + (x - sx) / 2,
+                                y: y - (y - sy) / 4,
+                                width: 250,
+                                height: 20,
+                                text: '',
+                                selected: true
                             }
-                        return item
-                    }))
-                }
+                        }
+                    return item
+                }))
 
             }
         };
@@ -93,8 +91,8 @@ const DrawAnnotations = () => {
                                         text={annotation.label.text}
                                         colour="#FFDAE1"
                                         onTextChange={(text) => {
-                                            setAnnotations(annotations.map((item) => {
-                                                if (!item.text)
+                                            setAnnotations(annotations.map((item, i) => {
+                                                if (index===i)
                                                     return {...item, label: {...item.label, text}}
                                                 return item
                                             }))
@@ -135,7 +133,17 @@ const DrawAnnotations = () => {
                                             }))
                                         }}
                                         setIsDrawing={setIsDrawing}
-
+                                        onMove={e => {
+                                            const ants = annotations.map((item, i) => {
+                                                if (i === index) return {
+                                                    ...item,
+                                                    label: {...item.label, ...e.target.position()}
+                                                };
+                                                return item
+                                            })
+                                            setAnnotations(ants)
+                                        }}
+                                        index={index}
                                     />
 
                                 )}

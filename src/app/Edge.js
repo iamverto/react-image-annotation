@@ -25,9 +25,8 @@ const Edge = ({node1, node2}) => {
                 arrowEnd.x,
                 arrowEnd.y
             ]}
-            draggable
-            stroke="#07c"
-            fill="#07c"
+            stroke="black"
+            fill="black"
             strokeWidth={2}
             pointerWidth={6}
         />

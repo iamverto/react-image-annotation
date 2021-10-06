@@ -21,6 +21,10 @@ export function ResizableText({
         }
     }, [isSelected]);
 
+    useEffect(()=>{
+        handleResize()
+    }, [text])
+
     function handleResize() {
         if (textRef.current !== null) {
             const textNode = textRef.current;

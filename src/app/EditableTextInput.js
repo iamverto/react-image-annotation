@@ -5,7 +5,7 @@ function getStyle(width, height) {
     const isFirefox = navigator.userAgent.toLowerCase().indexOf("firefox") > -1;
     const baseStyle = {
         width: `${width}px`,
-        height: `${height}px`,
+        height: `${height+10}px`,
         border: "none",
         padding: "0px",
         margin: "0px",
@@ -21,7 +21,7 @@ function getStyle(width, height) {
     }
     return {
         ...baseStyle,
-        margintop: "-4px"
+        // marginTop: "2px"
     };
 }
 
@@ -42,6 +42,9 @@ export function EditableTextInput({
           onChange={onChange}
           onKeyDown={onKeyDown}
           style={style}
+          autoFocus
+          placeholder='Comment Here...'
+
       />
         </Html>
     );

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Group, Rect } from "react-konva";
-import { EditableText } from "./EditableText";
+import React, {useState, useEffect} from "react";
+import {Group, Rect} from "react-konva";
+import {EditableText} from "./EditableText";
 
 export function StickyNote({
                                colour,
@@ -14,18 +14,19 @@ export function StickyNote({
                                onTextChange,
                                selected,
                                onTextClick,
-                               setIsDrawing
+                               setIsDrawing,
+                               onMove,
                            }) {
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(true);
     const [isTransforming, setIsTransforming] = useState(false);
 
-    useEffect(() => {
-        if (!selected && isEditing) {
-            setIsEditing(false);
-        } else if (!selected && isTransforming) {
-            setIsTransforming(false);
-        }
-    }, [selected, isEditing, isTransforming]);
+    // useEffect(() => {
+    //     if (!selected && isEditing) {
+    //         setIsEditing(false);
+    //     } else if (!selected && isTransforming) {
+    //         setIsTransforming(false);
+    //     }
+    // }, [selected, isEditing, isTransforming]);
 
     function toggleEdit() {
         setIsEditing(!isEditing);
@@ -51,35 +52,33 @@ export function StickyNote({
                    container.style.cursor = "crosshair";
                    setIsDrawing(true)
                }}
-
-
+               onDragMove={onMove}
         >
             <Rect
-                x={20}
-                y={20}
+                x={10}
+                y={10}
                 width={width}
-                height={height + 40}
-                fill={colour}
-                shadowColor="black"
-                shadowOffsetY={10}
-                shadowOffsetX={0}
-                shadowBlur={30}
-                shadowOpacity={0.6}
+                height={height}
+                // fill='yellow'
+                // strokeWidth={4}
+                // stroke='black'
                 perfectDrawEnabled={false}
             />
             <Rect
                 x={0}
                 y={0}
-                width={width + 40}
-                height={height + 60}
-                fill={colour}
+                width={width + 10}
+                height={height + 10}
+                fill='yellow'
+                strokeWidth={2}
+                stroke='black'
                 perfectDrawEnabled={false}
                 onClick={onClick}
                 onTap={onClick}
             />
             <EditableText
-                x={20}
-                y={40}
+                x={5}
+                y={3}
                 text={text}
                 width={width}
                 height={height}
@@ -89,6 +88,10 @@ export function StickyNote({
                 onToggleEdit={toggleEdit}
                 onToggleTransform={toggleTransforming}
                 onChange={onTextChange}
+
+                // onMouseEnter={()=>setIsEditing(true)}
+                // onMouseLeave={()=>setIsEditing(false)}
+
             />
         </Group>
     );
