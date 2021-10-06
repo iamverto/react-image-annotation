@@ -1,9 +1,9 @@
-import React, {useRef, useState} from "react";
-import {Arrow, Group, Layer, Rect, Stage, Text} from "react-konva";
+import React, {useEffect, useRef, useState} from "react";
+import {Arrow, Group, Image, Layer, Rect, Stage} from "react-konva";
 import {StickyNote} from "./StickyNote";
 import Edge from "./Edge";
 
-const DrawAnnotations = () => {
+const DrawAnnotations = ({image}) => {
         const [annotations, setAnnotations] = useState([]); // marker, label
         const [newRect, setNewRect] = useState([]);
         const [isDrawing, setIsDrawing] = useState(true)
@@ -38,8 +38,8 @@ const DrawAnnotations = () => {
                             label: {
                                 x: x + (x - sx) / 2,
                                 y: y - (y - sy) / 4,
-                                width: 250,
-                                height: 20,
+                                width: 200,
+                                height: 16,
                                 text: '',
                                 selected: true
                             }
@@ -67,15 +67,30 @@ const DrawAnnotations = () => {
             }
         };
 
+        if (!image) {
+            return null
+        }
+
+        let max = 800;
+        let ratio = (image.width > image.height ? (image.width / max) : (image.height / max));
         return (
             <Stage
                 onMouseDown={handleMouseDown}
                 onMouseUp={handleMouseUp}
                 onMouseMove={handleMouseMove}
-                width={900}
-                height={700}
+                width={image.width / ratio}
+                height={image.height / ratio}
             >
                 <Layer>
+                    {image && (
+                        <Image
+                            x={0}
+                            y={0}
+                            image={image}
+                            width={image.width / ratio}
+                            height={image.height / ratio}
+                        />
+                    )}
                     {annotations.map((annotation, index) => {
                         return (
                             <>
@@ -92,7 +107,7 @@ const DrawAnnotations = () => {
                                         colour="#FFDAE1"
                                         onTextChange={(text) => {
                                             setAnnotations(annotations.map((item, i) => {
-                                                if (index===i)
+                                                if (index === i)
                                                     return {...item, label: {...item.label, text}}
                                                 return item
                                             }))

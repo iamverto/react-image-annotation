@@ -13,7 +13,7 @@ function getStyle(width, height) {
         outline: "none",
         resize: "none",
         colour: "black",
-        fontSize: "24px",
+        fontSize: "16px",
         fontFamily: "sans-serif"
     };
     if (isFirefox) {
