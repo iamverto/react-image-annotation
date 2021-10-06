@@ -103,6 +103,7 @@ const DrawAnnotations = () => {
                         arrowEnd.x,
                         arrowEnd.y
                     ]}
+                    draggable
                     stroke="#07c"
                     fill="#07c"
                     strokeWidth={2}
