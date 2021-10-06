@@ -69,12 +69,12 @@ const DrawAnnotations = () => {
 
             const arrowStart = {
                 x: node2.x,
-                y: node2.y + (node1.width / 2)
+                y: node2.y + (node1.height / 2)
             };
 
             const arrowEnd = {
                 x: node1.x + node1.width + 4,
-                y: node1.y + (node1.width / 2)
+                y: node1.y + (node1.height / 2)
             };
             // const arrowStart = {
             //     x: radius + node2.x + -radius * Math.cos(angle + Math.PI),
@@ -120,7 +120,6 @@ const DrawAnnotations = () => {
                 height={700}
             >
                 <Layer>
-                    {/*{annotations.length > 1 && <Edge node1={annotations[0]} node2={annotations[1]}/>}*/}
 
 
                     {annotations.map((annotation, index) => {
@@ -129,9 +128,12 @@ const DrawAnnotations = () => {
                         // }
                         return (
                             <>
+                                {annotation.rect && annotation.text && <Edge node1={annotation.rect} node2={annotation.text}/>}
+
                                 {annotation.text && (
                                     <Text
-                                        text="Hello there!"
+                                        text="Hello there! I am priyanshu... Hello there! I am priyanshu... Hello there! I am priyanshu... Hello there! I am priyanshu... Hello there! I am priyanshu... "
+                                        fontSize={16}
                                         x={annotation.text.x}
                                         y={annotation.text.y}
                                         width={annotation.text.width}
@@ -147,6 +149,14 @@ const DrawAnnotations = () => {
                                             setIsDrawing(true)
                                         }}
                                         draggable
+                                        onDragMove={e => {
+                                            const ants = annotations.map((item, i) => {
+                                                if (i === index) return {...item, text: {...item.text, ...e.target.position()}};
+                                                return item
+                                            })
+                                            setAnnotations(ants)
+                                        }}
+
                                     />
                                 )}
 
@@ -156,7 +166,7 @@ const DrawAnnotations = () => {
                                     width={annotation.rect.width}
                                     height={annotation.rect.height}
                                     fill="transparent"
-                                    stroke="#ff9955"
+                                    stroke="red"
                                     draggable
                                     strokeWidth={4}
                                     onMouseEnter={(e) => {
