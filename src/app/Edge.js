@@ -9,7 +9,7 @@ const Edge = ({node1, node2}) => {
 
     const arrowEnd = {
         x: node1.x + node1.width + 4,
-        y: node1.y + (node2.height / 2)
+        y: node1.y + (node1.height / 2)
     };
     const arrowMiddle = {
         x: (arrowStart.x + arrowEnd.x) / 2,

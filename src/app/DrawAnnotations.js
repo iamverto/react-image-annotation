@@ -135,8 +135,8 @@ const DrawAnnotations = ({image, clear}) => {
                                             }}
                                             selected={annotation.label.selected}
                                             onTextResize={(newWidth, newHeight) => {
-                                                setAnnotations(annotations.map((item) => {
-                                                    if (!item.text)
+                                                setAnnotations(annotations.map((item, i) => {
+                                                    if (index === i)
                                                         return {
                                                             ...item,
                                                             label: {
@@ -149,8 +149,8 @@ const DrawAnnotations = ({image, clear}) => {
                                                 }))
                                             }}
                                             onClick={() => {
-                                                setAnnotations(annotations.map((item) => {
-                                                    if (!item.text)
+                                                setAnnotations(annotations.map((item, i) => {
+                                                    if (index === i)
                                                         return {
                                                             ...item,
                                                             label: {...item.label, selected: !annotation.label.selected,}
@@ -159,8 +159,8 @@ const DrawAnnotations = ({image, clear}) => {
                                                 }))
                                             }}
                                             onTextClick={(newSelected) => {
-                                                setAnnotations(annotations.map((item) => {
-                                                    if (!item.text)
+                                                setAnnotations(annotations.map((item, i) => {
+                                                    if (index === i)
                                                         return {
                                                             ...item,
                                                             label: {...item.label, selected: newSelected,}
