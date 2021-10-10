@@ -1,26 +1,26 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Rect, Transformer} from "react-konva";
 
 const Marker = ({x, y, width, height, setIsDrawing, onMove,selected, setSelected}) => {
     const markerRef = useRef(null);
     const transformerRef = useRef(null);
 
-    const transformer = true ? (
-        <Transformer
-            ref={transformerRef}
-            rotateEnabled={false}
-            flipEnabled={false}
-            enabledAnchors={["middle-left", "middle-right"]}
-            boundBoxFunc={(oldBox, newBox) => {
-                newBox.width = Math.max(30, newBox.width);
-                return newBox;
-            }}
-        />
-    ) : null;
+    // const transformer = true ? (
+    //     <Transformer
+    //         ref={transformerRef}
+    //         rotateEnabled={false}
+    //         flipEnabled={false}
+    //         enabledAnchors={["middle-left", "middle-right"]}
+    //         boundBoxFunc={(oldBox, newBox) => {
+    //             newBox.width = Math.max(30, newBox.width);
+    //             return newBox;
+    //         }}
+    //     />
+    // ) : null;
 
 
     return (
-        <>
+        <React.Fragment>
             <Rect
                 ref={markerRef}
                 x={x}
@@ -44,8 +44,16 @@ const Marker = ({x, y, width, height, setIsDrawing, onMove,selected, setSelected
                 onDragMove={onMove}
                 onClick={setSelected}
             />
-            {transformer}
-        </>
+            {selected && (
+                <Transformer
+                    ref={transformerRef}
+                    boundBoxFunc={(oldBox, newBox) => {
+                        return oldBox;
+                    }}
+                    enabledAnchors={["middle-right"]}
+                />
+            )}
+        </React.Fragment>
 
     )
 }

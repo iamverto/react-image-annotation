@@ -82,12 +82,28 @@ const DrawAnnotations = ({image, clear}) => {
 
         const handleExport = () => {
             setSelected(null)
-            setTimeout(()=>{
+            setTimeout(() => {
                 const uri = stageRef.current.toDataURL();
                 downloadURI(uri, 'exported_sample.png')
-
             }, 1000)
         };
+
+
+        const removeAnnotation = (e) => {
+            if (e.keyCode === 8 || e.keyCode === 46) {
+                setAnnotations(annotations.filter((item, i) => selected !== i))
+            }
+            setSelected(null)
+            setIsDrawing(false)
+        }
+
+        useEffect(() => {
+            document.addEventListener('keydown', removeAnnotation, false)
+            return () => {
+                document.removeEventListener('keydown', removeAnnotation, false);
+            }
+        }, [selected])
+
 
         if (!image) {
             return null
