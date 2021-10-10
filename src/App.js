@@ -19,7 +19,14 @@ const theme = createTheme({
             styleOverrides:{
                 root:{
                     borderRadius: 0,
-
+                }
+            }
+        },
+        MuiPaper:{
+            styleOverrides:{
+                root:{
+                    borderRadius: 0,
+                    boxShadow:`10px 10px 0px 0px #09859020,0px 1px 1px 0px rgba(0,0,0,0.07),0px 1px 3px 0px rgba(0,0,0,0.07)`
                 }
             }
         }
@@ -43,12 +50,14 @@ export const App = () => {
     return (
         <ThemeProvider theme={theme}>
 
-            <div className='flex flex-col items-center text-center space-y-24'>
-                <Paper className='self-center shadow rounded-none'>
-                    <DrawAnnotations image={img} clear={()=>setImg(null)}/>
-                </Paper>
+            <div className='flex flex-col items-center text-center space-y-24 p-4 sm:p-8'>
+                {img && (
+                    <Paper className='self-center shadow rounded-none'>
+                        <DrawAnnotations image={img} clear={()=>setImg(null)}/>
+                    </Paper>
+                )}
                 {!img &&
-                    <div style={{
+                    <Paper className='shadow rounded-none p-24' style={{
                         backgroundColor: '#fff',
                         padding: 10,
                         width: 600,
@@ -58,7 +67,7 @@ export const App = () => {
                     }}>
                         <input type='file' onChange={e => setImage(e.target.files[0])}/>
                         {image && <Button variant='outlined' color={img?"primary":"secondary"} onClick={annotate}>Annotate</Button>}
-                    </div>
+                    </Paper>
                 }
             </div>
         </ThemeProvider>

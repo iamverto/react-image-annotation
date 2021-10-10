@@ -9,9 +9,9 @@ const DrawAnnotations = ({image, clear}) => {
         const [annotations, setAnnotations] = useState([]); // marker, label
         const [newRect, setNewRect] = useState([]);
         const [isDrawing, setIsDrawing] = useState(true)
+        const [selected, setSelected] = useState(null)
 
         const stageRef = useRef(null)
-
         const handleMouseDown = event => {
             if (isDrawing && newRect.length === 0) {
                 const {x, y} = event.target.getStage().getPointerPosition();
@@ -81,9 +81,12 @@ const DrawAnnotations = ({image, clear}) => {
         }
 
         const handleExport = () => {
-            const uri = stageRef.current.toDataURL();
-            console.log(uri)
-            downloadURI(uri, 'exported_sample.png')
+            setSelected(null)
+            setTimeout(()=>{
+                const uri = stageRef.current.toDataURL();
+                downloadURI(uri, 'exported_sample.png')
+
+            }, 1000)
         };
 
         if (!image) {
@@ -95,6 +98,7 @@ const DrawAnnotations = ({image, clear}) => {
         return (
             <div style={{width: image.width / ratio, margin: "auto"}} className='self-center flex flex-col space-y-12'>
                 <Stage
+
                     onMouseDown={handleMouseDown}
                     onMouseUp={handleMouseUp}
                     onMouseMove={handleMouseMove}
@@ -110,6 +114,12 @@ const DrawAnnotations = ({image, clear}) => {
                                 image={image}
                                 width={image.width / ratio}
                                 height={image.height / ratio}
+                                onMouseEnter={(e) => {
+                                    if (annotations.length < 1) {
+                                        const container = e.target.getStage().container();
+                                        container.style.cursor = "crosshair";
+                                    }
+                                }}
                             />
                         )}
                         {annotations.map((annotation, index) => {
@@ -199,8 +209,16 @@ const DrawAnnotations = ({image, clear}) => {
                                                 return item
                                             })
                                             setAnnotations(ants)
+                                            setSelected(index)
                                         }}
                                         setIsDrawing={setIsDrawing}
+                                        selected={selected === index}
+                                        setSelected={() => {
+                                            if (selected === index)
+                                                setSelected(null)
+                                            else
+                                                setSelected(index)
+                                        }}
                                     />
                                 </>
                             );
@@ -219,9 +237,9 @@ const DrawAnnotations = ({image, clear}) => {
                     </Layer>
                 </Stage>
 
-                <div className='p-4'>
+                <div className='p-4 space-x-4'>
                     <Button variant='contained' onClick={clear}>Clear All</Button>
-                    <Button onClick={handleExport}>Export</Button>
+                    <Button variant='outlined' color={"primary"} onClick={handleExport}>Export</Button>
                 </div>
 
             </div>

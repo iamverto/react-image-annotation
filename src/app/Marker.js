@@ -1,7 +1,7 @@
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import {Rect, Transformer} from "react-konva";
 
-const Marker = ({x, y, width, height, setIsDrawing, onMove}) => {
+const Marker = ({x, y, width, height, setIsDrawing, onMove,selected, setSelected}) => {
     const markerRef = useRef(null);
     const transformerRef = useRef(null);
 
@@ -27,7 +27,7 @@ const Marker = ({x, y, width, height, setIsDrawing, onMove}) => {
                 y={y}
                 width={width}
                 height={height}
-                fill="transparent"
+                fill={selected?"#ebcc3430":"transparent"}
                 stroke="#ebcc34"
                 draggable
                 strokeWidth={2}
@@ -42,6 +42,7 @@ const Marker = ({x, y, width, height, setIsDrawing, onMove}) => {
                     setIsDrawing?.(true)
                 }}
                 onDragMove={onMove}
+                onClick={setSelected}
             />
             {transformer}
         </>
