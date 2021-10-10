@@ -94,7 +94,7 @@ const DrawAnnotations = ({image, clear}) => {
                 setAnnotations(annotations.filter((item, i) => selected !== i))
             }
             setSelected(null)
-            setIsDrawing(false)
+            setIsDrawing(true)
         }
 
         useEffect(() => {
@@ -102,7 +102,7 @@ const DrawAnnotations = ({image, clear}) => {
             return () => {
                 document.removeEventListener('keydown', removeAnnotation, false);
             }
-        }, [selected])
+        }, [selected, annotations])
 
 
         if (!image) {
