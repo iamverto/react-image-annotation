@@ -45,7 +45,7 @@ export function ResizableText({
             flipEnabled={false}
             enabledAnchors={["middle-right"]}
             boundBoxFunc={(oldBox, newBox) => {
-                newBox.width = Math.max(30, newBox.width);
+                newBox.width = Math.max(60, newBox.width);
                 return newBox;
             }}
         />

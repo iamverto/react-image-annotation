@@ -3,10 +3,10 @@ import {Arrow, Group, Image, Layer, Rect, Stage} from "react-konva";
 import {StickyNote} from "./StickyNote";
 import Edge from "./Edge";
 import Marker from "./Marker";
-import {Button} from "@mui/material";
+import {Button, Icon} from "@mui/material";
 
-const DrawAnnotations = ({image, clear}) => {
-        const [annotations, setAnnotations] = useState([]); // marker, label
+const DrawAnnotations = ({image, prev_annotations,onAnnotationChange, clear, onBack}) => {
+        const [annotations, setAnnotations] = useState(prev_annotations); // marker, label
         const [newRect, setNewRect] = useState([]);
         const [isDrawing, setIsDrawing] = useState(true)
         const [selected, setSelected] = useState(null)
@@ -18,6 +18,10 @@ const DrawAnnotations = ({image, clear}) => {
                 setNewRect([{x, y, width: 0, height: 0, key: "0"}]);
             }
         };
+
+        useEffect(()=>{
+            onAnnotationChange(annotations)
+        }, [annotations])
 
         const handleMouseUp = event => {
             if (newRect.length === 1) {
@@ -109,7 +113,7 @@ const DrawAnnotations = ({image, clear}) => {
             return null
         }
 
-        let max = 800;
+        let max = window.innerWidth > 800 ? 800 : window.innerWidth;
         let ratio = (image.width > image.height ? (image.width / max) : (image.height / max));
         return (
             <div style={{width: image.width / ratio, margin: "auto"}} className='self-center flex flex-col space-y-12'>
@@ -253,7 +257,9 @@ const DrawAnnotations = ({image, clear}) => {
                     </Layer>
                 </Stage>
 
-                <div className='p-4 space-x-4'>
+                <div className='p-4 space-x-4 flex flex-row'>
+                    <Button onClick={onBack}><img src='back-arrow-1767515-1502579.png' className='h-4 w-4'/>History</Button>
+                    <div className='flex-1'/>
                     <Button variant='contained' onClick={clear}>Clear All</Button>
                     <Button variant='outlined' color={"primary"} onClick={handleExport}>Export</Button>
                 </div>
