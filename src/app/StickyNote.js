@@ -52,6 +52,16 @@ export function StickyNote({
                    container.style.cursor = "crosshair";
                    setIsDrawing(true)
                }}
+               onTouchStart={(e) => {
+                   const container = e.target.getStage().container();
+                   container.style.cursor = "pointer";
+                   setIsDrawing(false)
+               }}
+               onTouchEnd={(e) => {
+                   const container = e.target.getStage().container();
+                   container.style.cursor = "crosshair";
+                   setIsDrawing(true)
+               }}
                onDragMove={onMove}
         >
             <Rect

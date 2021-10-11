@@ -46,7 +46,7 @@ const DrawAnnotations = ({image, prev_annotations,onAnnotationChange, clear, onB
                             label: {
                                 x: x + (x - sx) / 2,
                                 y: y - (y - sy) / 4,
-                                width: 200,
+                                width: 150,
                                 height: 16,
                                 text: '',
                                 selected: true
@@ -119,8 +119,13 @@ const DrawAnnotations = ({image, prev_annotations,onAnnotationChange, clear, onB
             <div style={{width: image.width / ratio, margin: "auto"}} className='self-center flex flex-col space-y-12'>
                 <Stage
 
+                    onTouchStart={handleMouseDown}
                     onMouseDown={handleMouseDown}
+
+                    onTouchEnd={handleMouseUp}
                     onMouseUp={handleMouseUp}
+
+                    onTouchMove={handleMouseMove}
                     onMouseMove={handleMouseMove}
                     width={image.width / ratio}
                     height={image.height / ratio}

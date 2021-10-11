@@ -48,7 +48,7 @@ export const App = () => {
             let img = new Image();
             img.src = url;
             img.onload = () => {
-                setImages(images.concat({image, src: url, img, annotations: [], id:images.length}))
+                setImages(images.concat({image, src: url, img, annotations: [], id: images.length}))
             }
         }
     }
@@ -68,10 +68,11 @@ export const App = () => {
             <div className='flex flex-col items-center text-center space-y-24 p-4 sm:p-8'>
                 {activeImage &&
                 <Paper className='self-center shadow rounded-none'>
-                    <DrawAnnotations onAnnotationChange={onAnnotationChange}
-                                     onBack={() => setActiveImage(null)}
-                                     prev_annotations={activeImage.annotations}
-                                     image={activeImage.img}/>
+                    <DrawAnnotations
+                        onAnnotationChange={onAnnotationChange}
+                        onBack={() => setActiveImage(null)}
+                        prev_annotations={activeImage.annotations}
+                        image={activeImage.img}/>
                 </Paper>
                 }
 
@@ -82,21 +83,25 @@ export const App = () => {
                     margin: 'auto',
                     overflow: 'hidden'
                 }}>
-                    <Typography className='text-left text-lg font-600' style={{fontSize: 18, fontWeight: 600}}>Images to
-                        Annotate (History)</Typography>
-                    <Typography hidden={images.length > 0}
-                                className='text-left text-lg font-600 pb-4'
-                                color='textSecondary'>No Images, Please upload
-                        one</Typography>
+                    <Typography className='text-left text-lg font-600' style={{fontSize: 18, fontWeight: 600}}>
+                        Images to Annotate (History)
+                    </Typography>
+                    <Typography
+                        hidden={images.length > 0}
+                        className='text-left text-lg font-600 pb-4'
+                        color='textSecondary'>
+                        No Images, Please upload one
+                    </Typography>
 
                     {images.map(image => (
                         <div className='flex flex-col -mx-4 mb-4'>
-                            <div className='flex flex-row w-full p-4 items-center'>
+                            <div className='flex flex-row w-full p-4 items-center space-x-8'>
                                 <img src={image.src} className='h-32 w-32'/>
-                                <div className='flex-1 text-right space-y-4'>
+                                <div className='flex-1 text-end space-y-4'>
                                     <Typography>{image.image.name}</Typography>
-                                    <Button color='primary' variant='outlined' onClick={() => annotate(image)}>Annotate
-                                        this</Button>
+                                    <Button size={"small"} color='primary' variant='outlined' onClick={() => annotate(image)}>
+                                        Annotate
+                                    </Button>
                                 </div>
                             </div>
                             <Divider/>

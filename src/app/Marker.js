@@ -31,10 +31,21 @@ const Marker = ({x, y, width, height, setIsDrawing, onMove,selected, setSelected
                 stroke="#ebcc34"
                 draggable
                 strokeWidth={2}
+                onTouchStart={(e) => {
+                    const container = e.target.getStage().container();
+                    container.style.cursor = "pointer";
+                    setIsDrawing?.(false)
+                }}
                 onMouseEnter={(e) => {
                     const container = e.target.getStage().container();
                     container.style.cursor = "pointer";
                     setIsDrawing?.(false)
+                }}
+
+                onTouchEnd={(e) => {
+                    const container = e.target.getStage().container();
+                    container.style.cursor = "crosshair";
+                    setIsDrawing?.(true)
                 }}
                 onMouseLeave={(e) => {
                     const container = e.target.getStage().container();
